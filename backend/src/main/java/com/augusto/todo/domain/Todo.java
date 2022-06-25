@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -19,12 +20,13 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 public class Todo implements Serializable {
+    @Serial
     private static  final long serialVersionUID =1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)//gera o id automaticamente
     private Integer id;
-    
+
     private String titulo;
     private String descricao;
     private LocalDateTime dataParaFinalizar;
