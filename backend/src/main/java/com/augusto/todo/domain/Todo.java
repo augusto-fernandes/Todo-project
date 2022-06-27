@@ -1,6 +1,10 @@
 package com.augusto.todo.domain;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 
@@ -27,7 +31,9 @@ public class Todo implements Serializable {
 
     private String titulo;
     private String descricao;
-    private LocalDateTime dataParaFinalizar;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date dataParaFinalizar;
     private Boolean finalizado = false;
     
     @Override
