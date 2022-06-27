@@ -22,7 +22,7 @@ public class DBService {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     Todo t1 =new Todo(null,"Estudar", "Estudar Spring Boot 2 e Angular 11", sdf.parse("10/07/2022 "), false);
     Todo t2 =new Todo(null,"Ler", "Ler livro de desenvolvimento pessoal", sdf.parse("10/07/2022 "), true);
-    Todo t3 =new Todo(null,"Exercicios", "Fazer flexão", sdf.parse("10/07/2022 "), false);
+    Todo t3 =new Todo(null,"Exercicios", "Fazer flexão", sdf.parse("10/07/2022 "), true);
     Todo t4 =new Todo(null,"Meditar", "Meditar 20 minutos pela manhã", sdf.parse("10/07/2022 "), true);
 
         todoRepository.saveAll(Arrays.asList(t1,t2, t3, t4));

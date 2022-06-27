@@ -1,4 +1,7 @@
 <div class="container">
+    <div class="badge">
+        <button  mat-raised-button color="primary" matBadge="{{closed}}">Tasks Finalizadas</button>
+    </div>
     <button class="novo-todo mat-elevation-z8" mat-raised-button color="primary">Novo To-do</button>
 
     <div class="content" *ngFor=" let item of list">
@@ -25,4 +28,3 @@
           </mat-card>
 
     </div>
-</div>
