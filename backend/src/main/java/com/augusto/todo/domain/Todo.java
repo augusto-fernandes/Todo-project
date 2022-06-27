@@ -1,9 +1,6 @@
 package com.augusto.todo.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +15,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Todo implements Serializable {
     @Serial
@@ -31,11 +29,7 @@ public class Todo implements Serializable {
     private String descricao;
     private LocalDateTime dataParaFinalizar;
     private Boolean finalizado = false;
-
-    public Todo() {
-        super();
-    }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
