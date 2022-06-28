@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from './../../environments/environment';
 import { Todo } from './../models/todo';
 import { HttpClient } from '@angular/common/http';
@@ -8,10 +9,25 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class TodoService {
+
   baseUrl = environment.baseUrl;
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient, private snack: MatSnackBar) { }
 
   findAll(): Observable<Todo[]>{
     return this.http.get<Todo[]>(this.baseUrl);
+  }
+
+  delete(id: any):Observable<void>{
+    const url = `${this.baseUrl}/${id}`
+    return this.http.delete<void>(url);
+  }
+
+  message(msg:String): void{
+    this.snack.open(`${msg}`, 'OK', {
+      horizontalPosition: 'end',
+      verticalPosition:'top',
+      duration: 4000
+    })
   }
 }
