@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { TodoService } from './../../services/todo.service';
 import { Component, OnInit } from '@angular/core';
 import { Todo } from 'src/app/models/todo';
@@ -13,7 +14,7 @@ export class ReadAllComponent implements OnInit {
   list: Todo[] = []
   listFinished: Todo[] =[];
 
-  constructor(private service: TodoService) { }
+  constructor(private service: TodoService, private router: Router) { }
 
   ngOnInit(): void {
     this.findAll();
@@ -41,5 +42,8 @@ export class ReadAllComponent implements OnInit {
     })
   }
 
+  navegarParaFinalizados():void{
+    this.router.navigate(['finalizados'])
+  }
 }
 
