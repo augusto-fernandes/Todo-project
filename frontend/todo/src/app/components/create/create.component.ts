@@ -25,7 +25,7 @@ export class CreateComponent implements OnInit {
   create():void {
     this.formataData();
     this.service.create(this.todo).subscribe((resposta) =>{
-      this.service.message('To-do craido com sucesso!');
+      this.service.message('To-do criado com sucesso!');
       this.router.navigate(['']);
     }, err =>{
         this.service.message('Falha ao criar To-do');
