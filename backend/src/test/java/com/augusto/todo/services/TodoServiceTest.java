@@ -29,6 +29,7 @@ class TodoServiceTest {
     public static final String DESCRICAO = "Estudar Spring Boot 2 e Angular 11";
     public static final String DATA = "10/07/2022 ";
     public static final boolean OPEN = false;
+    public static final boolean CLOSE = true;
    public static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
     public static final int INDEX = 0;
     @InjectMocks
@@ -38,6 +39,7 @@ class TodoServiceTest {
     private TodoRepository repository;
 
     private Todo todo;
+    private Todo todoClose;
     private Optional<Todo> optionalTodo;
 
     @BeforeEach
@@ -94,8 +96,21 @@ class TodoServiceTest {
     }
 
     @Test
-    void findAllClose() {
+    void whenFindAllCloseReturnATodoClose() throws ParseException {
+        when(repository.findAllClose()).thenReturn(List.of(todoClose));
 
+        List<Todo> response = service.findAllClose();
+        assertNotNull(response);
+
+        assertEquals(1, response.size());
+        assertEquals(Todo.class, response.get(INDEX).getClass());
+
+
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(TITULO, response.get(INDEX).getTitulo());
+        assertEquals(DESCRICAO, response.get(INDEX).getDescricao());
+        assertEquals(SDF.parse(DATA), response.get(INDEX).getDataParaFinalizar());
+        assertEquals(CLOSE, response.get(INDEX).getFinalizado());
     }
 
     @Test
@@ -115,8 +130,9 @@ class TodoServiceTest {
     }
 
     private void startTodo() throws ParseException {
-         todo = new Todo(ID, TITULO, DESCRICAO, SDF.parse(DATA), OPEN);
-         optionalTodo = Optional.of(new Todo(ID, TITULO, DESCRICAO,SDF.parse(DATA),OPEN));
+        todo = new Todo(ID, TITULO, DESCRICAO, SDF.parse(DATA), OPEN);
+        todoClose = new Todo(ID, TITULO, DESCRICAO, SDF.parse(DATA), CLOSE);
 
+         optionalTodo = Optional.of(new Todo(ID, TITULO, DESCRICAO,SDF.parse(DATA),OPEN));
     }
 }
