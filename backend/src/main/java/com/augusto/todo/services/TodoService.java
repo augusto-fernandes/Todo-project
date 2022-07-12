@@ -1,8 +1,10 @@
 package com.augusto.todo.services;
 
 import com.augusto.todo.domain.Todo;
+import com.augusto.todo.domain.dto.TodoDTO;
 import com.augusto.todo.exceptions.ObjectNotFoundException;
 import com.augusto.todo.repositories.TodoRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,9 @@ public class TodoService {
 
     @Autowired
     private TodoRepository repository;
+
+    @Autowired
+    ModelMapper mapper;
 
     public Todo findById(Integer id){
         Optional<Todo> obj = repository.findById(id);
@@ -33,22 +38,16 @@ public class TodoService {
         return repository.findAll();
     }
 
-    public Todo create(Todo obj){
-        obj.setId(null);
-        return repository.save(obj);
+    public Todo create(TodoDTO obj){
+        return repository.save(mapper.map(obj, Todo.class));
+    }
+
+    public Todo update(TodoDTO obj){
+        return repository.save(mapper.map(obj, Todo.class));
     }
 
     public void delete(Integer id) {
         repository.deleteById(id);
-    }
-
-    public Todo update(Integer id, Todo obj){
-        Todo newObj = findById(id);
-        newObj.setTitulo(obj.getTitulo());
-        newObj.setDataParaFinalizar(obj.getDataParaFinalizar());
-        newObj.setDescricao(obj.getDescricao());
-        newObj.setFinalizado(obj.getFinalizado());
-        return repository.save(newObj);
     }
 
 }
