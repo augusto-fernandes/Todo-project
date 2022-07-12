@@ -114,7 +114,21 @@ class TodoServiceTest {
     }
 
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAListOfTodo() throws ParseException {
+        when(repository.findAll()).thenReturn(List.of(todo));
+
+        List<Todo> response = service.findAll();
+        assertNotNull(response);
+
+        assertEquals(1, response.size());
+        assertEquals(Todo.class, response.get(INDEX).getClass());
+
+
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(TITULO, response.get(INDEX).getTitulo());
+        assertEquals(DESCRICAO, response.get(INDEX).getDescricao());
+        assertEquals(SDF.parse(DATA), response.get(INDEX).getDataParaFinalizar());
+        assertEquals(OPEN, response.get(INDEX).getFinalizado());
     }
 
     @Test
