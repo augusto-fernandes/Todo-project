@@ -1,10 +1,12 @@
 package com.augusto.todo.services;
 
 import com.augusto.todo.domain.Todo;
+import com.augusto.todo.exceptions.ObjectNotFoundException;
 import com.augusto.todo.repositories.TodoRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.function.Try;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -23,6 +25,7 @@ import static org.mockito.Mockito.when;
 class TodoServiceTest {
 
     public static final int ID = 1;
+    public static final String OBJETO_NAO_ENCONTRADO = "Objeto Não encontrado! Id: " + ID + ", Tipo: " + Todo.class.getName();
     public static final String TITULO = "Estudar";
     public static final String DESCRICAO = "Estudar Spring Boot 2 e Angular 11";
     public static final String DATA = "10/07/2022 ";
@@ -60,6 +63,19 @@ class TodoServiceTest {
        assertEquals(NAO_FINALIZADO, response.getFinalizado());
 
     }
+
+    @Test
+    void  whenFindByIdReturnAnObjectNotFound(){
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException(OBJETO_NAO_ENCONTRADO));
+
+        try {
+            service.findById(ID);
+        } catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(OBJETO_NAO_ENCONTRADO, ex.getMessage());
+        }
+    }
+
 
     @Test
     void findAllOpen() {
