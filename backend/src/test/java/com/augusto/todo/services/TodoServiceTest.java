@@ -20,7 +20,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @SpringBootTest
 class TodoServiceTest {
@@ -147,9 +148,12 @@ class TodoServiceTest {
     }
 
     @Test
-    void delete() {
+    void deleteWithSuccess() {
+        when(repository.findById(anyInt())).thenReturn(optionalTodo);
+        doNothing().when(repository).deleteById(anyInt());
+        service.delete(ID);
+        verify(repository,times(1)).deleteById(anyInt());
     }
-
     @Test
     void update() {
     }
