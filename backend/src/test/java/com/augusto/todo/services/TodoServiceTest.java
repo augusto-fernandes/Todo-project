@@ -3,21 +3,20 @@ package com.augusto.todo.services;
 import com.augusto.todo.domain.Todo;
 import com.augusto.todo.exceptions.ObjectNotFoundException;
 import com.augusto.todo.repositories.TodoRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.function.Try;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -29,8 +28,9 @@ class TodoServiceTest {
     public static final String TITULO = "Estudar";
     public static final String DESCRICAO = "Estudar Spring Boot 2 e Angular 11";
     public static final String DATA = "10/07/2022 ";
-    public static final boolean NAO_FINALIZADO = false;
+    public static final boolean OPEN = false;
    public static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
+    public static final int INDEX = 0;
     @InjectMocks
     private TodoService service;
 
@@ -58,9 +58,8 @@ class TodoServiceTest {
        assertEquals(ID, response.getId());
        assertEquals(TITULO, response.getTitulo());
        assertEquals(DESCRICAO, response.getDescricao());
-       assertEquals(ID, response.getId());
        assertEquals(SDF.parse(DATA), response.getDataParaFinalizar());
-       assertEquals(NAO_FINALIZADO, response.getFinalizado());
+       assertEquals(OPEN, response.getFinalizado());
 
     }
 
@@ -76,13 +75,27 @@ class TodoServiceTest {
         }
     }
 
-
     @Test
-    void findAllOpen() {
+    void whenFindAllOpenReturnTodosOpen() throws ParseException {
+        when(repository.findAllOpen()).thenReturn(List.of(todo));
+
+        List<Todo> response = service.findAllOpen();
+        assertNotNull(response);
+
+        assertEquals(1, response.size());
+        assertEquals(Todo.class, response.get(INDEX).getClass());
+
+
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(TITULO, response.get(INDEX).getTitulo());
+        assertEquals(DESCRICAO, response.get(INDEX).getDescricao());
+        assertEquals(SDF.parse(DATA), response.get(INDEX).getDataParaFinalizar());
+        assertEquals(OPEN, response.get(INDEX).getFinalizado());
     }
 
     @Test
     void findAllClose() {
+
     }
 
     @Test
@@ -102,8 +115,8 @@ class TodoServiceTest {
     }
 
     private void startTodo() throws ParseException {
-         todo = new Todo(ID, TITULO, DESCRICAO, SDF.parse(DATA), NAO_FINALIZADO);
-         optionalTodo = Optional.of(new Todo(ID, TITULO, DESCRICAO,SDF.parse(DATA),NAO_FINALIZADO));
+         todo = new Todo(ID, TITULO, DESCRICAO, SDF.parse(DATA), OPEN);
+         optionalTodo = Optional.of(new Todo(ID, TITULO, DESCRICAO,SDF.parse(DATA),OPEN));
 
     }
 }
