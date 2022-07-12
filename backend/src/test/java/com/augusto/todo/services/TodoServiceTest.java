@@ -3,10 +3,12 @@ package com.augusto.todo.services;
 import com.augusto.todo.domain.Todo;
 import com.augusto.todo.exceptions.ObjectNotFoundException;
 import com.augusto.todo.repositories.TodoRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -132,7 +134,16 @@ class TodoServiceTest {
     }
 
     @Test
-    void create() {
+    void create() throws ParseException {
+        when(repository.save(Mockito.any())).thenReturn(todo);
+        Todo response = service.create(todo);
+        todo.setId(1);
+        assertNotNull(response);
+        assertEquals(ID, response.getId());
+        assertEquals(TITULO, response.getTitulo());
+        assertEquals(DESCRICAO, response.getDescricao());
+        assertEquals(SDF.parse(DATA), response.getDataParaFinalizar());
+        assertEquals(OPEN, response.getFinalizado());
     }
 
     @Test
