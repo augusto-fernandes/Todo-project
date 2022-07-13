@@ -1,6 +1,7 @@
 package com.augusto.todo.services;
 
 import com.augusto.todo.domain.Todo;
+import com.augusto.todo.domain.dto.TodoDTO;
 import com.augusto.todo.exceptions.ObjectNotFoundException;
 import com.augusto.todo.repositories.TodoRepository;
 import org.junit.jupiter.api.Assertions;
@@ -10,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.text.ParseException;
@@ -41,7 +43,10 @@ class TodoServiceTest {
     @Mock
     private TodoRepository repository;
 
+    @Mock
+    private ModelMapper mapper;
     private Todo todo;
+    private TodoDTO todoDTO;
     private Todo todoClose;
     private Optional<Todo> optionalTodo;
 
@@ -135,17 +140,34 @@ class TodoServiceTest {
     }
 
     @Test
-    void create() throws ParseException {
-        when(repository.save(Mockito.any())).thenReturn(todo);
-        Todo response = service.create(todo);
-        todo.setId(1);
+    void whenCreateThenReturnSuccess() throws ParseException {
+        when(repository.save(any())).thenReturn(todo);
+
+        Todo response = service.create(todoDTO);
+
         assertNotNull(response);
+        assertEquals(Todo.class, response.getClass());
         assertEquals(ID, response.getId());
         assertEquals(TITULO, response.getTitulo());
         assertEquals(DESCRICAO, response.getDescricao());
         assertEquals(SDF.parse(DATA), response.getDataParaFinalizar());
         assertEquals(OPEN, response.getFinalizado());
     }
+    @Test
+    void whenUpdateThenReturnSuccess() throws ParseException {
+        when(repository.save(any())).thenReturn(todo);
+
+        Todo response = service.update(todoDTO);
+
+        assertNotNull(response);
+        assertEquals(Todo.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(TITULO, response.getTitulo());
+        assertEquals(DESCRICAO, response.getDescricao());
+        assertEquals(SDF.parse(DATA), response.getDataParaFinalizar());
+        assertEquals(OPEN, response.getFinalizado());
+    }
+
 
     @Test
     void deleteWithSuccess() {
@@ -154,12 +176,11 @@ class TodoServiceTest {
         service.delete(ID);
         verify(repository,times(1)).deleteById(anyInt());
     }
-    @Test
-    void update() {
-    }
+
 
     private void startTodo() throws ParseException {
         todo = new Todo(ID, TITULO, DESCRICAO, SDF.parse(DATA), OPEN);
+        todoDTO = new TodoDTO(ID, TITULO, DESCRICAO, SDF.parse(DATA), OPEN);
         todoClose = new Todo(ID, TITULO, DESCRICAO, SDF.parse(DATA), CLOSE);
 
          optionalTodo = Optional.of(new Todo(ID, TITULO, DESCRICAO,SDF.parse(DATA),OPEN));
