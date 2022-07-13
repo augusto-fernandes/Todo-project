@@ -33,11 +33,14 @@ class TodoResourcesTest {
     public static final String DESCRICAO = "Estudar Spring Boot 2 e Angular 11";
     public static final String DATA = "10/07/2022 ";
     public static final boolean OPEN = false;
+    public static final boolean CLOSE = true;
     public static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
     public static final int INDEX = 0;
 
     private Todo todo;
+    private Todo todoClose;
     private TodoDTO todoDTO;
+
 
     @InjectMocks
     TodoResources resources;
@@ -94,11 +97,42 @@ class TodoResourcesTest {
     }
 
     @Test
-    void listClose() {
+    void whenListCloseReturnATodoClose() throws ParseException {
+       when(service.findAllClose()).thenReturn(List.of(todoClose));
+        ResponseEntity<List<Todo>> response =resources.listClose();
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(Todo.class, response.getBody().get(INDEX).getClass());
+
+        assertEquals(ID, response.getBody().get(INDEX).getId());
+        assertEquals(TITULO, response.getBody().get(INDEX).getTitulo());
+        assertEquals(DESCRICAO, response.getBody().get(INDEX).getDescricao());
+        assertEquals(SDF.parse(DATA), response.getBody().get(INDEX).getDataParaFinalizar());
+        assertEquals(CLOSE, response.getBody().get(INDEX).getFinalizado());
     }
 
     @Test
-    void listAll() {
+    void whenListAllThenReturnAListOfTodoDTO() throws ParseException {
+        when(service.findAll()).thenReturn(List.of(todo));
+        when(mapper.map(any(),any())).thenReturn(todoDTO);
+
+        ResponseEntity<List<TodoDTO>> response = resources.listAll();
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(ArrayList.class, response.getBody().getClass());
+        assertEquals(TodoDTO.class, response.getBody().get(INDEX).getClass());
+
+        assertEquals(ID, response.getBody().get(INDEX).getId());
+        assertEquals(TITULO, response.getBody().get(INDEX).getTitulo());
+        assertEquals(DESCRICAO, response.getBody().get(INDEX).getDescricao());
+        assertEquals(SDF.parse(DATA), response.getBody().get(INDEX).getDataParaFinalizar());
+        assertEquals(OPEN, response.getBody().get(INDEX).getFinalizado());
     }
 
     @Test
@@ -115,6 +149,7 @@ class TodoResourcesTest {
 
     private void startTodo() throws ParseException {
         todo = new Todo(ID, TITULO, DESCRICAO, SDF.parse(DATA), OPEN);
+        todoClose = new Todo(ID, TITULO, DESCRICAO, SDF.parse(DATA), CLOSE);
         todoDTO = new TodoDTO(ID, TITULO, DESCRICAO, SDF.parse(DATA), OPEN);
     }
 }
