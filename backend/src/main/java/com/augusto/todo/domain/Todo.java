@@ -17,7 +17,6 @@ import java.util.Objects;
 
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -36,16 +35,5 @@ public class Todo implements Serializable {
     private Date dataParaFinalizar;
     private Boolean finalizado = false;
     
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Todo todo = (Todo) o;
-        return Objects.equals(id, todo.id);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

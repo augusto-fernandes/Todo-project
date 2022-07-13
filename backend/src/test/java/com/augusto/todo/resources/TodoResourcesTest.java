@@ -39,7 +39,7 @@ class TodoResourcesTest {
 
     private Todo todo;
     private Todo todoClose;
-    private TodoDTO todoDTO;
+    private TodoDTO todoDTO = new TodoDTO();
 
 
     @InjectMocks

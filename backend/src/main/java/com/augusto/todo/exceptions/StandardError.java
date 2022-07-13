@@ -2,22 +2,19 @@ package com.augusto.todo.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@Setter
 public class StandardError implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private Long timestamp;
+    private LocalDate timestamp;
     private Integer status;
     private String message;
 }
