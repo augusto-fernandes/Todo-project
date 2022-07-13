@@ -147,7 +147,24 @@ class TodoResourcesTest {
     }
 
     @Test
-    void update() {
+    void whenUpdateThenReturnSuccess() throws ParseException {
+        when(service.update(todoDTO)).thenReturn(todo);
+        when(mapper.map(any(), any())).thenReturn(todoDTO);
+
+        ResponseEntity<TodoDTO> response = resources.update(ID, todoDTO);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(todoDTO.getClass(),response.getBody().getClass());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(TITULO, response.getBody().getTitulo());
+        assertEquals(DESCRICAO, response.getBody().getDescricao());
+        assertEquals(SDF.parse(DATA), response.getBody().getDataParaFinalizar());
+        assertEquals(OPEN, response.getBody().getFinalizado());
     }
 
     @Test
