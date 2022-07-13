@@ -11,10 +11,13 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -72,7 +75,22 @@ class TodoResourcesTest {
     }
 
     @Test
-    void listOpen() {
+    void whenListOpenReturnATodoOpen() throws ParseException {
+        when(service.findAllOpen()).thenReturn(List.of(todo));
+
+        ResponseEntity<List<Todo>> response =resources.listOpen();
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(Todo.class, response.getBody().get(INDEX).getClass());
+
+        assertEquals(ID, response.getBody().get(INDEX).getId());
+        assertEquals(TITULO, response.getBody().get(INDEX).getTitulo());
+        assertEquals(DESCRICAO, response.getBody().get(INDEX).getDescricao());
+        assertEquals(SDF.parse(DATA), response.getBody().get(INDEX).getDataParaFinalizar());
+        assertEquals(OPEN, response.getBody().get(INDEX).getFinalizado());
     }
 
     @Test
