@@ -7,15 +7,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class TodoResourcesTest {
@@ -47,8 +52,23 @@ class TodoResourcesTest {
     }
 
     @Test
-    void findById() {
+    void whenFindByIdReturnSuccess() throws ParseException {
+        when(service.findById(anyInt())).thenReturn(todo);
+        when(mapper.map(any(),any())).thenReturn(todoDTO);
 
+        ResponseEntity<TodoDTO> response = resources.findById(ID);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(TodoDTO.class, response.getBody().getClass());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(TITULO, response.getBody().getTitulo());
+        assertEquals(DESCRICAO, response.getBody().getDescricao());
+        assertEquals(SDF.parse(DATA), response.getBody().getDataParaFinalizar());
+        assertEquals(OPEN, response.getBody().getFinalizado());
     }
 
     @Test
